@@ -33,7 +33,7 @@ Six integration tests run against an in-memory SQLite database (no file system s
 
 ### Via the simulator UI
 
-Navigate to **Simulator** in the sidebar. Six pre-loaded sample events match the Appendix A payloads exactly — this is the fastest way to see the full pipeline in action during a live review. Select one, inspect or edit the JSON, then click **Submit Event**. The result panel shows the HTTP status, generated actions, and a review reason if the event was routed to the queue.
+Navigate to **Simulator** in the sidebar. Seven pre-loaded sample events cover every pipeline path — this is the fastest way to see the full workflow in action during a live review. Select one, inspect or edit the JSON, then click **Submit Event**. The result panel shows the HTTP status, generated actions, and a review reason if the event was routed to the queue.
 
 ### Via curl
 
@@ -80,7 +80,8 @@ Every inbound event passes through an 11-step synchronous pipeline:
 5. **Unknown stream → review** — unrecognised sources are routed to the review queue immediately.
 6. **Adapter dispatch** — calls the stream-specific adapter to validate domain fields and generate a list of typed actions.
 7. **Adapter review signal → review** — if the adapter returns `ok: false` (e.g. a missing domain field), the event goes to the review queue with the adapter's reason.
-8–9. **Mock service execution** — passes the actions to the stream's mock service. If the service throws, the event goes to review.
+8. **Mock service call** — passes the generated actions to the stream's mock service.
+9. **Service failure → review** — if the mock service throws, the event is routed to the review queue with the error as the reason.
 10. **Persist actions** — inserts each action as `completed` inside a transaction.
 11. **Mark completed** — sets event status to `completed` and writes a final audit log entry.
 
