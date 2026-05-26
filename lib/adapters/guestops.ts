@@ -3,6 +3,10 @@ import type { IncomingEvent, AdapterResult } from '../types';
 const REQUIRED_FIELDS = ['reservation_id', 'guest_name', 'requested_check_in'] as const;
 
 export async function guestopsAdapter(event: IncomingEvent): Promise<AdapterResult> {
+  if (event.event_type !== 'reservation.change_requested') {
+    return { ok: false, reason: `Unsupported event type for GuestOps: ${event.event_type}` };
+  }
+
   const p = event.payload;
 
   for (const field of REQUIRED_FIELDS) {

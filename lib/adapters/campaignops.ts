@@ -8,6 +8,10 @@ function formatChannel(channel: string): string {
 }
 
 export async function campaignopsAdapter(event: IncomingEvent): Promise<AdapterResult> {
+  if (event.event_type !== 'client_brief.received') {
+    return { ok: false, reason: `Unsupported event type for CampaignOps: ${event.event_type}` };
+  }
+
   const p = event.payload;
 
   for (const field of REQUIRED_SCALAR_FIELDS) {

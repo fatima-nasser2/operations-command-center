@@ -55,6 +55,16 @@ const SAMPLES = [
     },
   },
   {
+    label: 'Duplicate — submit sample 1 first, then this',
+    tag: 'duplicate',
+    body: {
+      source_event_id: 'finance-001',
+      source: 'financeops',
+      event_type: 'invoice.overdue',
+      payload: { invoice_id: 'INV-9281', customer_name: 'Acme Trading', amount: 4200, currency: 'USD', days_overdue: 17 },
+    },
+  },
+  {
     label: 'Simulated failure — should not be completed',
     tag: 'failure',
     body: {
@@ -72,6 +82,7 @@ const TAG_COLORS: Record<string, string> = {
   guestops:    'bg-teal-50 text-teal-700',
   unknown:     'bg-gray-100 text-gray-600',
   review:      'bg-amber-50 text-amber-700',
+  duplicate:   'bg-orange-50 text-orange-700',
   failure:     'bg-red-50 text-red-600',
 };
 

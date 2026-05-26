@@ -9,6 +9,10 @@ const REQUIRED_FIELDS = [
 ] as const;
 
 export async function financeopsAdapter(event: IncomingEvent): Promise<AdapterResult> {
+  if (event.event_type !== 'invoice.overdue') {
+    return { ok: false, reason: `Unsupported event type for FinanceOps: ${event.event_type}` };
+  }
+
   const p = event.payload;
 
   for (const field of REQUIRED_FIELDS) {
